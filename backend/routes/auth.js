@@ -59,13 +59,12 @@ router.post(
           expiresIn: 3600,
         },
         (err, token) => {
-          if (err) throw err;
+          if (err) return res.status(500).json({ msg: 'Token generation failed' });
           res.json({ token });
         }
       );
     } catch (err) {
-      console.error(err.message);
-      res.status(500).send('Server error');
+      return res.status(500).json({ msg: 'Server error' });
     }
   }
 );
@@ -114,13 +113,12 @@ router.post(
           expiresIn: 3600,
         },
         (err, token) => {
-          if (err) throw err;
+          if (err) return res.status(500).json({ msg: 'Token generation failed' });
           res.json({ token });
         }
       );
     } catch (err) {
-      console.error(err.message);
-      res.status(500).send('Server error');
+      return res.status(500).json({ msg: 'Server error' });
     }
   }
 );

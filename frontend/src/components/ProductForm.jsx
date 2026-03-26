@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const ProductForm = ({ addProduct, updateProduct, editingProduct }) => {
+const ProductForm = ({ addProduct, updateProduct, editingProduct, setError, setSuccess }) => {
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -32,6 +32,8 @@ const ProductForm = ({ addProduct, updateProduct, editingProduct }) => {
   const onSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem('token');
+    if (setError) setError('');
+    if (setSuccess) setSuccess('');
     try {
         if (editingProduct) {
             const res = await axios.put(
@@ -47,7 +49,14 @@ const ProductForm = ({ addProduct, updateProduct, editingProduct }) => {
             addProduct(res.data);
         }
     } catch (err) {
-      console.error(err.response.data);
+      const msg =
+        err?.response?.data?.msg ||
+        err?.response?.data?.message ||
+        (Array.isArray(err?.response?.data?.errors)
+          ? err.response.data.errors.map((e) => e.msg).join(', ')
+          : null) ||
+        'Request failed';
+      if (setError) setError(msg);
     }
   };
 

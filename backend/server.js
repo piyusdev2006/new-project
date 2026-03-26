@@ -2,6 +2,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const connectDB = require("./config/db");
+const { notFound, errorHandler } = require("./middleware/error");
 
 // Load env vars
 dotenv.config();
@@ -22,6 +23,8 @@ dotenv.config();
     // Define Routes
     app.use("/api/v1/auth", require("./routes/auth"));
     app.use("/api/v1/products", require("./routes/products"));
+    app.use(notFound);
+    app.use(errorHandler);
 
     const PORT = process.env.PORT || 5000;
 

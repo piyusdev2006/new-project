@@ -78,7 +78,17 @@ The API routes are defined in the `backend/routes` directory.
 -   **Authentication:** `backend/routes/auth.js`
 -   **Products:** `backend/routes/products.js`
 
-You can use a tool like Postman to test the APIs.
+### Postman Collection
+
+Import these into Postman:
+
+- `postman/mern-assignment.postman_collection.json`
+- `postman/mern-assignment.postman_environment.json`
+
+Environment variables used:
+- `baseUrl` (default `http://localhost:5000`)
+- `token` (set automatically after running the Login request)
+- `productId` (set manually for update/delete requests)
 
 ## Scalability
 

@@ -8,13 +8,13 @@ const Product = require('../models/Product');
 // @route   GET api/v1/products
 // @desc    Get all products
 // @access  Private
-router.get('/', auth, async (req, res) => {
+router.get('/', auth, async (req, res, next) => {
   try {
     const products = await Product.find();
     res.json(products);
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server Error');
+    res.status(500);
+    next(err);
   }
 });
 
@@ -32,7 +32,7 @@ router.post(
       check('price', 'Price is required').isNumeric(),
     ],
   ],
-  async (req, res) => {
+  async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
@@ -51,8 +51,8 @@ router.post(
 
       res.json(product);
     } catch (err) {
-      console.error(err.message);
-      res.status(500).send('Server Error');
+      res.status(500);
+      next(err);
     }
   }
 );
@@ -60,7 +60,7 @@ router.post(
 // @route   PUT api/v1/products/:id
 // @desc    Update product
 // @access  Private (Admin only)
-router.put('/:id', [auth, authorize('admin')], async (req, res) => {
+router.put('/:id', [auth, authorize('admin')], async (req, res, next) => {
   const { name, description, price } = req.body;
 
   // Build product object
@@ -82,15 +82,15 @@ router.put('/:id', [auth, authorize('admin')], async (req, res) => {
 
     res.json(product);
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server Error');
+    res.status(500);
+    next(err);
   }
 });
 
 // @route   DELETE api/v1/products/:id
 // @desc    Delete product
 // @access  Private (Admin only)
-router.delete('/:id', [auth, authorize('admin')], async (req, res) => {
+router.delete('/:id', [auth, authorize('admin')], async (req, res, next) => {
   try {
     let product = await Product.findById(req.params.id);
 
@@ -100,8 +100,8 @@ router.delete('/:id', [auth, authorize('admin')], async (req, res) => {
 
     res.json({ msg: 'Product removed' });
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server Error');
+    res.status(500);
+    next(err);
   }
 });
 
